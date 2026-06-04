@@ -1,0 +1,140 @@
+name: Daily APK Update Check
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      debug_mode:
+        description: 'Enable verbose debug logging'
+        type: boolean
+        default: false
+
+concurrency:
+  group: apk-update
+  cancel-in-progress: false
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  preflight:
+    name: Pre-flight Checks
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.check.outputs.should_run }}
+      state: ${{ steps.check.outputs.state }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check prerequisites and workflow state
+        id: check
+        env:
+          HAS_GDRIVE_KEY: ${{ secrets.GDRIVE_API_KEY != '' }}
+        run: |
+          if [ "$HAS_GDRIVE_KEY" = "false" ]; then
+            echo "::warning::GDRIVE_API_KEY secret is not configured."
+            echo "::warning::See STATE.md for setup instructions."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "state=MissingSecret" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          STATE="Running"
+          if [ -f "STATE.md" ]; then
+            EXTRACTED=$(grep -oP '(?<=<!-- STATE: )\w+(?= -->)' STATE.md | head -1)
+            if [ -n "$EXTRACTED" ]; then
+              STATE="$EXTRACTED"
+            fi
+          fi
+
+          echo "state=$STATE" >> "$GITHUB_OUTPUT"
+
+          if [ "$STATE" = "Paused" ]; then
+            echo "::notice::Workflow is PAUSED. Check open issues and update STATE.md to Resumed."
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "Workflow state: $STATE"
+
+  update:
+    name: Download, Extract, Release
+    needs: preflight
+    if: needs.preflight.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Locate Android build-tools (aapt)
+        id: aapt
+        run: |
+          AAPT=""
+          if [ -n "$ANDROID_HOME" ]; then
+            AAPT=$(find "$ANDROID_HOME/build-tools" -name "aapt" -type f 2>/dev/null \
+                   | sort -rV | head -1)
+          fi
+          if [ -z "$AAPT" ]; then
+            echo "::warning::aapt not found via ANDROID_HOME — installing via apt."
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq aapt
+            AAPT="aapt"
+          fi
+          echo "AAPT_PATH=$AAPT" >> "$GITHUB_ENV"
+          echo "aapt_path=$AAPT" >> "$GITHUB_OUTPUT"
+          echo "Using aapt at: $AAPT"
+          "$AAPT" version || true
+
+      - name: Install system utilities
+        run: sudo apt-get install -y -qq unzip
+
+      - name: Install Python dependencies
+        run: |
+          pip install -q --upgrade pip
+          pip install -q -r requirements.txt
+
+      - name: Run APK update pipeline
+        id: pipeline
+        env:
+          GDRIVE_API_KEY:         ${{ secrets.GDRIVE_API_KEY }}
+          GH_TOKEN:               ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO:                ${{ github.repository }}
+          GDRIVE_ROOT_FOLDER_ID:  "1BfeK39boriHy-9q76eXLLqbCwfV17-Gv"
+          DEBUG_MODE:             ${{ github.event.inputs.debug_mode || 'false' }}
+        run: python3 scripts/main.py
+
+      - name: Commit state
+        if: always()
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name  "github-actions[bot]"
+
+          git add \
+                  STATE.md \
+                  MANUAL_VERSIONS.md \
+                  config/rename_map.json \
+                  2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "chore: update release state [skip ci]"
+            git push
+          fi
