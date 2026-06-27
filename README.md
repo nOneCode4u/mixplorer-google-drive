@@ -102,7 +102,7 @@ This repository provides mirroring as a convenience service. It does not claim o
 
 [![Stars](https://img.shields.io/github/stars/nOneCode4u/mixplorer-google-drive?style=for-the-badge&logo=github&color=FFD700)](https://github.com/nOneCode4u/mixplorer-google-drive/stargazers) [![Forks](https://img.shields.io/github/forks/nOneCode4u/mixplorer-google-drive?style=for-the-badge&logo=github&color=FF8C00)](https://github.com/nOneCode4u/mixplorer-google-drive/network/members) [![License](https://img.shields.io/github/license/nOneCode4u/mixplorer-google-drive?style=for-the-badge&color=blue)](https://github.com/nOneCode4u/mixplorer-google-drive/blob/main/LICENSE)
 
-[![Star History Chart](https://api.star-history.com/svg?repos=nOneCode4u/mixplorer-google-drive&type=Date)](https://star-history.com/#nOneCode4u/mixplorer-google-drive&Date)
+[![Star History Chart](https://api.star-history.com/chart?repos=nOneCode4u/mixplorer-google-drive&type=date&theme=dark&legend=top-left)](https://star-history.com/#nOneCode4u/mixplorer-google-drive&type=date&theme=dark&legend=top-left)
 
 ---
 
