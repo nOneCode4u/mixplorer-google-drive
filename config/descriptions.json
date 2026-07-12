@@ -1,0 +1,44 @@
+{
+  "MiXplorer": {
+    "display_name": "MiXplorer",
+    "description": "MiXplorer is a fast, smooth, and beautifully designed file manager for Android. It features a dual-pane interface for efficient file operations, deep archive support, built-in media player, and connections to cloud services including Google Drive, Dropbox, OneDrive, FTP, SFTP, SMB, and WebDAV. Highly customisable through themes and a rich ecosystem of official add-ons. No ads, no trackers, no subscriptions.",
+    "icon": "📁",
+    "category": "File Manager"
+  },
+  "MiX_Archive": {
+    "display_name": "MiX Archive",
+    "description": "Archive add-on for MiXplorer. Adds complete support for creating and extracting ZIP, RAR, RAR5, 7z, TAR, GZ, BZ2, XZ, ISO, and many more archive formats directly within MiXplorer — no third-party app needed. Supports password-protected archives and multi-volume sets. Requires MiXplorer to be installed.",
+    "icon": "🗜️",
+    "category": "MiXplorer Add-on"
+  },
+  "MiX_Codecs": {
+    "display_name": "MiX Codecs",
+    "description": "Media codec add-on for MiXplorer. Extends the built-in MiXplorer media player with additional audio and video decoding capabilities, enabling smooth playback of formats not natively supported by the Android system — including FLAC, OGG, MKV, AVI, and more. Improves compatibility across a wide range of media files without requiring a separate player app. Requires MiXplorer to be installed.",
+    "icon": "🎵",
+    "category": "MiXplorer Add-on"
+  },
+  "MiX_Encrypt": {
+    "display_name": "MiX Encrypt",
+    "description": "Encryption add-on for MiXplorer. Provides strong AES-based file encryption and decryption directly from within MiXplorer. Protect sensitive files with industry-standard cryptographic algorithms and manage encrypted containers without leaving the file manager. Requires MiXplorer to be installed.",
+    "icon": "🔐",
+    "category": "MiXplorer Add-on"
+  },
+  "MiX_Image": {
+    "display_name": "MiX Image",
+    "description": "Image viewer add-on for MiXplorer. Adds support for a wide range of image formats including RAW camera files, TIFF, WEBP, and more, with smooth pinch-to-zoom, pan, and swipe-based gallery navigation. Includes basic image editing and rotation. Requires MiXplorer to be installed.",
+    "icon": "🖼️",
+    "category": "MiXplorer Add-on"
+  },
+  "MiX_PDF": {
+    "display_name": "MiX PDF",
+    "description": "PDF viewer add-on for MiXplorer. Render and navigate PDF documents of any length directly inside MiXplorer without switching to a separate reader app. Supports text selection, copy, zoom, and smooth multi-page navigation. Requires MiXplorer to be installed.",
+    "icon": "📄",
+    "category": "MiXplorer Add-on"
+  },
+  "MiX_Tagger": {
+    "display_name": "MiX Tagger",
+    "description": "Audio metadata tag editor add-on for MiXplorer. View and edit ID3v1, ID3v2, Vorbis Comment, APEv2, and other tag formats for MP3, FLAC, OGG, M4A, OPUS, and more — directly within MiXplorer. Supports batch tag editing across multiple files and embedded album artwork management. Requires MiXplorer to be installed.",
+    "icon": "🏷️",
+    "category": "MiXplorer Add-on"
+  }
+}

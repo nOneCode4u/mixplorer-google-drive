@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.env
+venv/
+.venv/
+*.pyo
+tmp/
+*.apk
+logs/
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
