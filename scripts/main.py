@@ -113,7 +113,7 @@ def load_obtainium_urls_from_readme() -> dict[str, str]:
     Returns a dictionary mapping app names (e.g. 'MiXplorer', 'MiX Archive', 'MiX_Archive')
     to their configured Obtainium redirect URLs.
     """
-    readme_path = BASE_DIR / "README.md"
+    readme_path = Path("README.md")
     if not readme_path.exists():
         return {}
 
@@ -418,7 +418,10 @@ def process_app(
             log.info(f"  Already named correctly: {new_name}")
             final_files.append(dst)
         else:
-            shutil.copy2(src, dst)
+            try:
+                shutil.copy2(src, dst)
+            except shutil.SameFileError:
+                log.info(f"  Already in place: {new_name}")
             final_files.append(dst)
             log.info(f"  Renamed: {src.name}  →  {new_name}")
 
