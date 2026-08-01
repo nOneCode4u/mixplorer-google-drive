@@ -1,12 +1,12 @@
 # Workflow State
 
-<!-- STATE: Running -->
+<!-- STATE: Error -->
 
 | Key | Value |
 |-----|-------|
-| **Last Updated** | 2026-07-31 08:25:51 UTC |
-| **Last Status**  | Success |
-| **Details**      | Released=0  Skipped=7  Failed=0 |
+| **Last Updated** | 2026-08-01 07:55:02 UTC |
+| **Last Status**  | Unexpected error in MiX_Archive |
+| **Details**      | name 'BASE_DIR' is not defined |
 
 ---
 
